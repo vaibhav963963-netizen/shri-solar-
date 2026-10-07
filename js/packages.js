@@ -4,7 +4,7 @@ const COMPANY_INFO = {
     nameMarathi: "श्री सोलर सेल्स आणि सर्व्हिसेस",
     tagline: "BRIGHT SOLUTIONS. SUSTAINABLE FUTURE.",
     phones: ["9325868092", "8830562035"],
-    email: "gadakhshyam@gmail.com",
+    email: "Shrisolarservices@gmail.com",
     website: "www.shrisolar.com",
     address: "Khandala Road, Chikhli, Dist. Buldhana, Maharashtra - 443201",
     subOffice: "Gat No 14 near Painganga College, Yelgaon, Maharashtra 415111",
