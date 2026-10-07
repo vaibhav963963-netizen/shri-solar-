@@ -99,6 +99,41 @@ document.addEventListener('DOMContentLoaded', () => {
     bindFormListeners();
 });
 
+// Dismiss preloader smoothly once everything is loaded
+window.addEventListener('load', () => {
+    setTimeout(() => {
+        const preloader = document.getElementById('appPreloader');
+        if (preloader) {
+            preloader.classList.add('fade-out');
+            setTimeout(() => {
+                preloader.style.display = 'none';
+            }, 500);
+        }
+    }, 700);
+});
+
+// Mobile Tab Switcher Handler
+function switchMobileTab(tab) {
+    const sidebar = document.getElementById('editorSidebar');
+    const preview = document.getElementById('previewWorkspace');
+    const btnEditor = document.getElementById('tabBtnEditor');
+    const btnPreview = document.getElementById('tabBtnPreview');
+    
+    if (tab === 'editor') {
+        if (sidebar) sidebar.classList.remove('mobile-hidden');
+        if (preview) preview.classList.add('mobile-hidden');
+        if (btnEditor) btnEditor.classList.add('active');
+        if (btnPreview) btnPreview.classList.remove('active');
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    } else {
+        if (sidebar) sidebar.classList.add('mobile-hidden');
+        if (preview) preview.classList.remove('mobile-hidden');
+        if (btnEditor) btnEditor.classList.remove('active');
+        if (btnPreview) btnPreview.classList.add('active');
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+}
+
 // Apply a preset package instantly
 function applyPackage(pkgId) {
     const pkg = window.SOLAR_PACKAGES[pkgId];

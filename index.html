@@ -13,11 +13,43 @@
 </head>
 <body>
 
+    <!-- ========================================================
+         BRANDED PRELOADER / SPLASH SCREEN
+         ======================================================== -->
+    <div id="appPreloader" class="preloader-overlay no-print">
+        <div class="preloader-content">
+            <div class="logo-wrapper">
+                <div class="sun-glow"></div>
+                <img src="assets/logo.jpg" alt="Shri Solar Logo" class="preloader-logo">
+            </div>
+            <h3 class="preloader-title font-heading">Shri Solar Studio</h3>
+            <p class="preloader-subtitle">श्री सोलर सेल्स आणि सर्व्हिसेस</p>
+            <div class="preloader-bar-track">
+                <div class="preloader-bar-fill"></div>
+            </div>
+            <span class="preloader-status">Loading Solar Proposal Studio...</span>
+        </div>
+    </div>
+
+    <!-- ========================================================
+         MOBILE TAB NAVIGATOR (Visible only on mobile/tablet)
+         ======================================================== -->
+    <nav class="mobile-tab-nav no-print">
+        <button id="tabBtnEditor" onclick="switchMobileTab('editor')" class="mobile-tab-btn active">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path></svg>
+            📝 Edit Details
+        </button>
+        <button id="tabBtnPreview" onclick="switchMobileTab('preview')" class="mobile-tab-btn">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
+            📄 View Quotation
+        </button>
+    </nav>
+
     <div class="app-container">
         <!-- ========================================================
              LEFT SIDEBAR: QUOTATION CONTROL PANEL
              ======================================================== -->
-        <aside class="editor-sidebar no-print">
+        <aside id="editorSidebar" class="editor-sidebar no-print">
             <!-- App Header -->
             <div class="editor-header flex items-center justify-between">
                 <div class="flex items-center gap-2.5">
@@ -259,7 +291,7 @@
         <!-- ========================================================
              RIGHT WORKSPACE: LIVE INTERACTIVE QUOTATION PREVIEW (A4)
              ======================================================== -->
-        <main class="preview-workspace">
+        <main id="previewWorkspace" class="preview-workspace mobile-hidden">
             <div class="preview-controls no-print">
                 <div class="flex items-center gap-2 text-sm text-slate-600 font-medium">
                     <span class="inline-block w-2.5 h-2.5 rounded-full bg-emerald-500 animate-pulse"></span>
@@ -277,190 +309,193 @@
                 </div>
             </div>
 
-            <!-- THE FORMAL QUOTATION DOCUMENT FOR EXPORT -->
-            <div id="quotationDocument" class="quotation-sheet">
-                
-                <!-- TOP HEADER -->
-                <div>
-                    <div class="quote-header">
-                        <div class="quote-brand">
-                            <img src="assets/logo.jpg" alt="Shri Solar Logo">
-                            <div class="brand-text">
-                                <span class="marathi-title">श्री सोलर सेल्स आणि सर्व्हिसेस</span>
-                                <h1>Shri Solar Services</h1>
-                                <p class="tagline">Bright Solutions. Sustainable Future.</p>
-                            </div>
-                        </div>
-                        <div class="quote-contact-info">
-                            <p class="phone">📞 +91 9325868092 / 8830562035</p>
-                            <p>✉️ gadakhshyam@gmail.com</p>
-                            <p>🌐 www.shrisolar.com</p>
-                            <p>📍 Khandala Road, Chikhli, Dist. Buldhana (MH)</p>
-                        </div>
-                    </div>
-
-                    <!-- DOCUMENT TITLE BAR -->
-                    <div class="doc-title-bar">
-                        <h2>Solar Power Plant Quotation</h2>
-                        <div class="doc-meta">
-                            <span>Quote No: <strong id="pv_quoteNo">SS-540</strong></span>
-                            <span>Date: <strong id="pv_date">10 Aug 2026</strong></span>
-                            <span>Valid Until: <strong id="pv_validDate">09 Sep 2026</strong></span>
-                        </div>
-                    </div>
-
-                    <!-- CLIENT & PROPOSAL OVERVIEW -->
-                    <div class="client-info-grid">
-                        <div class="info-card">
-                            <div class="info-card-header">Client Details (ग्राहक माहिती)</div>
-                            <div class="info-row"><span class="label">Client Name:</span> <span class="val" id="pv_clientName">— (Enter Customer Name)</span></div>
-                            <div class="info-row"><span class="label">Contact No:</span> <span class="val" id="pv_clientPhone">—</span></div>
-                            <div class="info-row"><span class="label">Installation Site:</span> <span class="val" id="pv_clientAddress">—</span></div>
-                            <div class="info-row"><span class="label">Category:</span> <span class="val" id="pv_category">Residential</span></div>
-                        </div>
-
-                        <div class="info-card">
-                            <div class="info-card-header">System Proposed (सौर प्रकल्प तपशील)</div>
-                            <div class="info-row"><span class="label">System Name:</span> <span class="val text-emerald-800 font-bold" id="pv_packageName">3 kW On-Grid Solar System</span></div>
-                            <div class="info-row"><span class="label">System Capacity:</span> <span class="val font-bold" id="pv_capacity">3 kW</span></div>
-                            <div class="info-row"><span class="label">Prepared By:</span> <span class="val" id="pv_preparedBy">Shyam Gadakh</span></div>
-                            <div class="info-row"><span class="label">DISCOM & Policy:</span> <span class="val">PM Surya Ghar Yojana (DBT)</span></div>
-                        </div>
-                    </div>
-
-                    <!-- TECHNICAL SPECIFICATIONS TABLE -->
-                    <table class="specs-table">
-                        <thead>
-                            <tr>
-                                <th style="width: 22%;">Component</th>
-                                <th style="width: 58%;">Technical Specifications & Make</th>
-                                <th style="width: 20%;">Warranty</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <td><span class="component-badge">SOLAR PANELS</span></td>
-                                <td id="pv_panelDetails"><strong>Waaree Group</strong> - Bifacial Mono PERC / TopCon (6 panels x 579W+)</td>
-                                <td id="pv_panelWarranty">12/30 Yrs (Prod/Perf)</td>
-                            </tr>
-                            <tr>
-                                <td><span class="component-badge">GRID INVERTER</span></td>
-                                <td id="pv_inverterDetails"><strong>Sungrow / Havells</strong> - 5 kW Grid-Tied Smart Inverter with Wi-Fi Monitoring</td>
-                                <td id="pv_inverterWarranty">10 Years</td>
-                            </tr>
-                            <tr>
-                                <td><span class="component-badge">STRUCTURE</span></td>
-                                <td id="pv_structureDetails">JSW / Tata Steel HDGI 12kg/kW, IS 2062 Heavy Duty Structure</td>
-                                <td>25 Years</td>
-                            </tr>
-                            <tr>
-                                <td><span class="component-badge">SOLAR CABLES</span></td>
-                                <td id="pv_cableDetails">Havells / Polycab UV-Resistant 4/6 sq.mm DC & AC Solar Cable</td>
-                                <td>8 Years</td>
-                            </tr>
-                            <tr>
-                                <td><span class="component-badge">ELECTRICAL & LA</span></td>
-                                <td id="pv_electricalDetails">True Power / Tata HDGI Chemical Earthing (3 Pits) + LA-25 Lightning Arrester</td>
-                                <td>Standard OEM</td>
-                            </tr>
-                            <tr>
-                                <td><span class="component-badge">SERVICES & AMC</span></td>
-                                <td id="pv_servicesDetails">End-to-end Installation, Free AMC, Generation Monitoring & Net Metering Liaisoning</td>
-                                <td>Comprehensive</td>
-                            </tr>
-                        </tbody>
-                    </table>
-
-                    <!-- GENERATION & ROI HIGHLIGHTS -->
-                    <div class="financial-grid">
-                        <div class="highlight-box savings-box">
-                            <div class="text-xs font-bold text-amber-800 uppercase tracking-wide mb-1">⚡ Expected Solar Generation & Savings</div>
-                            <div class="grid grid-cols-2 gap-2 text-xs">
-                                <div><span class="text-slate-500">Daily Generation:</span> <strong id="pv_dailyGen" class="text-slate-800 block">12 - 14 Units/day</strong></div>
-                                <div><span class="text-slate-500">Monthly Avg:</span> <strong id="pv_monthlyGen" class="text-slate-800 block">370 - 400 Units</strong></div>
-                                <div><span class="text-slate-500">Est. Yearly Savings:</span> <strong id="pv_yearlySavings" class="text-emerald-700 block font-bold">₹30,500/year</strong></div>
-                                <div><span class="text-slate-500">Payback Period:</span> <strong id="pv_payback" class="text-slate-800 block">4 - 5 Years</strong></div>
-                            </div>
-                        </div>
-
-                        <!-- PRICING BREAKDOWN BOX -->
-                        <div class="highlight-box">
-                            <div class="text-xs font-bold text-emerald-800 uppercase tracking-wide mb-1">💰 Price Breakdown (दर तपशील)</div>
-                            <div class="space-y-1 text-xs">
-                                <div class="flex justify-between">
-                                    <span class="text-slate-600">Base System Cost:</span>
-                                    <span id="pv_basePrice" class="font-semibold text-slate-800">₹1,88,246</span>
-                                </div>
-                                <div class="flex justify-between">
-                                    <span class="text-slate-600" id="pv_gstLabel">GST Amount (8.9%):</span>
-                                    <span id="pv_gstAmount" class="font-semibold text-slate-800">₹16,754</span>
-                                </div>
-                                <div class="flex justify-between border-t border-emerald-200 pt-1 font-bold">
-                                    <span class="text-slate-800">Total Gross Cost (incl. GST):</span>
-                                    <span id="pv_totalGrossPrice" class="text-slate-900">₹2,05,000</span>
-                                </div>
-                                <div class="flex justify-between text-emerald-700 font-bold">
-                                    <span>PM Surya Ghar DBT Subsidy:</span>
-                                    <span id="pv_subsidyAmount">- ₹78,000</span>
+            <!-- SCROLLABLE OUTER WRAPPER FOR MOBILE -->
+            <div class="preview-sheet-outer">
+                <!-- THE FORMAL QUOTATION DOCUMENT (EXACT SAME A4 SHEET UI) -->
+                <div id="quotationDocument" class="quotation-sheet">
+                    
+                    <!-- TOP HEADER -->
+                    <div>
+                        <div class="quote-header">
+                            <div class="quote-brand">
+                                <img src="assets/logo.jpg" alt="Shri Solar Logo">
+                                <div class="brand-text">
+                                    <span class="marathi-title">श्री सोलर सेल्स आणि सर्व्हिसेस</span>
+                                    <h1>Shri Solar Services</h1>
+                                    <p class="tagline">Bright Solutions. Sustainable Future.</p>
                                 </div>
                             </div>
+                            <div class="quote-contact-info">
+                                <p class="phone">📞 +91 9325868092 / 8830562035</p>
+                                <p>✉️ gadakhshyam@gmail.com</p>
+                                <p>🌐 www.shrisolar.com</p>
+                                <p>📍 Khandala Road, Chikhli, Dist. Buldhana (MH)</p>
+                            </div>
+                        </div>
+
+                        <!-- DOCUMENT TITLE BAR -->
+                        <div class="doc-title-bar">
+                            <h2>Solar Power Plant Quotation</h2>
+                            <div class="doc-meta">
+                                <span>Quote No: <strong id="pv_quoteNo">SS-540</strong></span>
+                                <span>Date: <strong id="pv_date">10 Aug 2026</strong></span>
+                                <span>Valid Until: <strong id="pv_validDate">09 Sep 2026</strong></span>
+                            </div>
+                        </div>
+
+                        <!-- CLIENT & PROPOSAL OVERVIEW -->
+                        <div class="client-info-grid">
+                            <div class="info-card">
+                                <div class="info-card-header">Client Details (ग्राहक माहिती)</div>
+                                <div class="info-row"><span class="label">Client Name:</span> <span class="val" id="pv_clientName">— (Enter Customer Name)</span></div>
+                                <div class="info-row"><span class="label">Contact No:</span> <span class="val" id="pv_clientPhone">—</span></div>
+                                <div class="info-row"><span class="label">Installation Site:</span> <span class="val" id="pv_clientAddress">—</span></div>
+                                <div class="info-row"><span class="label">Category:</span> <span class="val" id="pv_category">Residential</span></div>
+                            </div>
+
+                            <div class="info-card">
+                                <div class="info-card-header">System Proposed (सौर प्रकल्प तपशील)</div>
+                                <div class="info-row"><span class="label">System Name:</span> <span class="val text-emerald-800 font-bold" id="pv_packageName">3 kW On-Grid Solar System</span></div>
+                                <div class="info-row"><span class="label">System Capacity:</span> <span class="val font-bold" id="pv_capacity">3 kW</span></div>
+                                <div class="info-row"><span class="label">Prepared By:</span> <span class="val" id="pv_preparedBy">Shyam Gadakh</span></div>
+                                <div class="info-row"><span class="label">DISCOM & Policy:</span> <span class="val">PM Surya Ghar Yojana (DBT)</span></div>
+                            </div>
+                        </div>
+
+                        <!-- TECHNICAL SPECIFICATIONS TABLE -->
+                        <table class="specs-table">
+                            <thead>
+                                <tr>
+                                    <th style="width: 22%;">Component</th>
+                                    <th style="width: 58%;">Technical Specifications & Make</th>
+                                    <th style="width: 20%;">Warranty</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td><span class="component-badge">SOLAR PANELS</span></td>
+                                    <td id="pv_panelDetails"><strong>Waaree Group</strong> - Bifacial Mono PERC / TopCon (6 panels x 579W+)</td>
+                                    <td id="pv_panelWarranty">12/30 Yrs (Prod/Perf)</td>
+                                </tr>
+                                <tr>
+                                    <td><span class="component-badge">GRID INVERTER</span></td>
+                                    <td id="pv_inverterDetails"><strong>Sungrow / Havells</strong> - 5 kW Grid-Tied Smart Inverter with Wi-Fi Monitoring</td>
+                                    <td id="pv_inverterWarranty">10 Years</td>
+                                </tr>
+                                <tr>
+                                    <td><span class="component-badge">STRUCTURE</span></td>
+                                    <td id="pv_structureDetails">JSW / Tata Steel HDGI 12kg/kW, IS 2062 Heavy Duty Structure</td>
+                                    <td>25 Years</td>
+                                </tr>
+                                <tr>
+                                    <td><span class="component-badge">SOLAR CABLES</span></td>
+                                    <td id="pv_cableDetails">Havells / Polycab UV-Resistant 4/6 sq.mm DC & AC Solar Cable</td>
+                                    <td>8 Years</td>
+                                </tr>
+                                <tr>
+                                    <td><span class="component-badge">ELECTRICAL & LA</span></td>
+                                    <td id="pv_electricalDetails">True Power / Tata HDGI Chemical Earthing (3 Pits) + LA-25 Lightning Arrester</td>
+                                    <td>Standard OEM</td>
+                                </tr>
+                                <tr>
+                                    <td><span class="component-badge">SERVICES & AMC</span></td>
+                                    <td id="pv_servicesDetails">End-to-end Installation, Free AMC, Generation Monitoring & Net Metering Liaisoning</td>
+                                    <td>Comprehensive</td>
+                                </tr>
+                            </tbody>
+                        </table>
+
+                        <!-- GENERATION & ROI HIGHLIGHTS -->
+                        <div class="financial-grid">
+                            <div class="highlight-box savings-box">
+                                <div class="text-xs font-bold text-amber-800 uppercase tracking-wide mb-1">⚡ Expected Solar Generation & Savings</div>
+                                <div class="grid grid-cols-2 gap-2 text-xs">
+                                    <div><span class="text-slate-500">Daily Generation:</span> <strong id="pv_dailyGen" class="text-slate-800 block">12 - 14 Units/day</strong></div>
+                                    <div><span class="text-slate-500">Monthly Avg:</span> <strong id="pv_monthlyGen" class="text-slate-800 block">370 - 400 Units</strong></div>
+                                    <div><span class="text-slate-500">Est. Yearly Savings:</span> <strong id="pv_yearlySavings" class="text-emerald-700 block font-bold">₹30,500/year</strong></div>
+                                    <div><span class="text-slate-500">Payback Period:</span> <strong id="pv_payback" class="text-slate-800 block">4 - 5 Years</strong></div>
+                                </div>
+                            </div>
+
+                            <!-- PRICING BREAKDOWN BOX -->
+                            <div class="highlight-box">
+                                <div class="text-xs font-bold text-emerald-800 uppercase tracking-wide mb-1">💰 Price Breakdown (दर तपशील)</div>
+                                <div class="space-y-1 text-xs">
+                                    <div class="flex justify-between">
+                                        <span class="text-slate-600">Base System Cost:</span>
+                                        <span id="pv_basePrice" class="font-semibold text-slate-800">₹1,88,246</span>
+                                    </div>
+                                    <div class="flex justify-between">
+                                        <span class="text-slate-600" id="pv_gstLabel">GST Amount (8.9%):</span>
+                                        <span id="pv_gstAmount" class="font-semibold text-slate-800">₹16,754</span>
+                                    </div>
+                                    <div class="flex justify-between border-t border-emerald-200 pt-1 font-bold">
+                                        <span class="text-slate-800">Total Gross Cost (incl. GST):</span>
+                                        <span id="pv_totalGrossPrice" class="text-slate-900">₹2,05,000</span>
+                                    </div>
+                                    <div class="flex justify-between text-emerald-700 font-bold">
+                                        <span>PM Surya Ghar DBT Subsidy:</span>
+                                        <span id="pv_subsidyAmount">- ₹78,000</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- NET PAYABLE BANNER -->
+                        <div class="total-due-card">
+                            <div>
+                                <span class="text-xs text-emerald-100 block uppercase font-semibold">Net Effective Customer Investment (Payable after Subsidy)</span>
+                                <span class="text-xs text-emerald-200">सबसिडी नंतर ग्राहकाची प्रत्यक्ष गुंतवणूक</span>
+                            </div>
+                            <div class="amount" id="pv_netPayable">₹1,27,000</div>
+                        </div>
+
+                        <!-- PAYMENT MILESTONES -->
+                        <div class="mt-3">
+                            <div class="text-[10px] font-bold text-slate-600 uppercase tracking-wider mb-1">Payment Schedule (हप्ते)</div>
+                            <div class="milestones-strip">
+                                <div class="milestone-item">
+                                    <span class="pct">40%</span>
+                                    <span class="stage">Advance Booking</span>
+                                </div>
+                                <div class="milestone-item">
+                                    <span class="pct">40%</span>
+                                    <span class="stage">Material Procurement</span>
+                                </div>
+                                <div class="milestone-item">
+                                    <span class="pct">10%</span>
+                                    <span class="stage">Installation Done</span>
+                                </div>
+                                <div class="milestone-item">
+                                    <span class="pct">10%</span>
+                                    <span class="stage">Net-Metering & Test</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- TERMS & SIGNATURE -->
+                        <div class="terms-signature-grid">
+                            <div>
+                                <div class="text-[10px] font-bold text-slate-700 uppercase mb-1">Terms & Conditions (नियम आणि अटी)</div>
+                                <ul class="terms-list">
+                                    <li id="pv_specialNotes">Central Govt. Subsidy under PM Surya Ghar Muft Bijli Yojana will be credited directly to consumer bank account via DBT post net-meter installation.</li>
+                                    <li>Proposal is valid for 30 days. Prices are inclusive of GST and all listed components.</li>
+                                    <li>Net metering approvals and meter release are subject to DISCOM / MSEDCL standard procedures.</li>
+                                    <li>Free AMC & technical performance support provided by Shri Solar Services.</li>
+                                </ul>
+                            </div>
+                            <div class="signature-box">
+                                <div class="signature-line"></div>
+                                <span class="signatory-name">For Shri Solar Services</span>
+                                <span class="signatory-title">Authorized Signatory / Founder</span>
+                            </div>
                         </div>
                     </div>
 
-                    <!-- NET PAYABLE BANNER -->
-                    <div class="total-due-card">
-                        <div>
-                            <span class="text-xs text-emerald-100 block uppercase font-semibold">Net Effective Customer Investment (Payable after Subsidy)</span>
-                            <span class="text-xs text-emerald-200">सबसिडी नंतर ग्राहकाची प्रत्यक्ष गुंतवणूक</span>
-                        </div>
-                        <div class="amount" id="pv_netPayable">₹1,27,000</div>
+                    <!-- FOOTER -->
+                    <div class="quote-footer">
+                        <p>Shri Solar Sales & Services • Khandala Road, Chikhli, Dist. Buldhana • Phone: 9325868092, 8830562035 • Email: gadakhshyam@gmail.com</p>
                     </div>
-
-                    <!-- PAYMENT MILESTONES -->
-                    <div class="mt-3">
-                        <div class="text-[10px] font-bold text-slate-600 uppercase tracking-wider mb-1">Payment Schedule (हप्ते)</div>
-                        <div class="milestones-strip">
-                            <div class="milestone-item">
-                                <span class="pct">40%</span>
-                                <span class="stage">Advance Booking</span>
-                            </div>
-                            <div class="milestone-item">
-                                <span class="pct">40%</span>
-                                <span class="stage">Material Procurement</span>
-                            </div>
-                            <div class="milestone-item">
-                                <span class="pct">10%</span>
-                                <span class="stage">Installation Done</span>
-                            </div>
-                            <div class="milestone-item">
-                                <span class="pct">10%</span>
-                                <span class="stage">Net-Metering & Test</span>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- TERMS & SIGNATURE -->
-                    <div class="terms-signature-grid">
-                        <div>
-                            <div class="text-[10px] font-bold text-slate-700 uppercase mb-1">Terms & Conditions (नियम आणि अटी)</div>
-                            <ul class="terms-list">
-                                <li id="pv_specialNotes">Central Govt. Subsidy under PM Surya Ghar Muft Bijli Yojana will be credited directly to consumer bank account via DBT post net-meter installation.</li>
-                                <li>Proposal is valid for 30 days. Prices are inclusive of GST and all listed components.</li>
-                                <li>Net metering approvals and meter release are subject to DISCOM / MSEDCL standard procedures.</li>
-                                <li>Free AMC & technical performance support provided by Shri Solar Services.</li>
-                            </ul>
-                        </div>
-                        <div class="signature-box">
-                            <div class="signature-line"></div>
-                            <span class="signatory-name">For Shri Solar Services</span>
-                            <span class="signatory-title">Authorized Signatory / Founder</span>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- FOOTER -->
-                <div class="quote-footer">
-                    <p>Shri Solar Sales & Services • Khandala Road, Chikhli, Dist. Buldhana • Phone: 9325868092, 8830562035 • Email: gadakhshyam@gmail.com</p>
                 </div>
             </div>
         </main>
