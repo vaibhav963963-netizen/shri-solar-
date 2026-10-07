@@ -97,6 +97,9 @@ document.addEventListener('DOMContentLoaded', () => {
     
     // Bind all form input change listeners for instant live updates
     bindFormListeners();
+
+    // Trigger mobile scaling check
+    updateMobileScale();
 });
 
 // Dismiss preloader smoothly once everything is loaded
@@ -109,7 +112,37 @@ window.addEventListener('load', () => {
                 preloader.style.display = 'none';
             }, 500);
         }
+        updateMobileScale();
     }, 700);
+});
+
+// Auto-scale quotation sheet on mobile screens so it fits without horizontal cutting
+function updateMobileScale() {
+    const sheet = document.getElementById('quotationDocument');
+    const outer = document.querySelector('.preview-sheet-outer');
+    if (!sheet || !outer) return;
+    
+    if (window.innerWidth <= 860) {
+        const availableWidth = window.innerWidth - 24; // responsive margin
+        const sheetWidth = 794; // 210mm in standard 96dpi pixels
+        const scale = Math.min(1, availableWidth / sheetWidth);
+        sheet.style.transform = `scale(${scale})`;
+        sheet.style.transformOrigin = 'top center';
+        sheet.style.margin = '0';
+        
+        // Adjust outer container height to prevent excess whitespace
+        const actualHeight = sheet.scrollHeight || sheet.offsetHeight || 1123;
+        outer.style.height = `${(actualHeight * scale) + 20}px`;
+    } else {
+        sheet.style.transform = 'none';
+        sheet.style.margin = '0 auto';
+        outer.style.height = 'auto';
+    }
+}
+
+window.addEventListener('resize', updateMobileScale);
+window.addEventListener('orientationchange', () => {
+    setTimeout(updateMobileScale, 200);
 });
 
 // Mobile Tab Switcher Handler
@@ -131,6 +164,8 @@ function switchMobileTab(tab) {
         if (btnEditor) btnEditor.classList.remove('active');
         if (btnPreview) btnPreview.classList.add('active');
         window.scrollTo({ top: 0, behavior: 'smooth' });
+        // Recalculate scale when preview tab opens
+        setTimeout(updateMobileScale, 50);
     }
 }
 
@@ -391,43 +426,154 @@ function updatePreview() {
     // Notes
     const notesEl = document.getElementById('pv_specialNotes');
     if (notesEl) notesEl.innerText = currentQuote.specialNotes;
+
+    // Recalibrate mobile scaling if needed
+    updateMobileScale();
 }
 
-// Download PDF using html2pdf
-function downloadPDF() {
-    const element = document.getElementById('quotationDocument');
-    const clientSanitized = (currentQuote.clientName || 'Quotation').trim().replace(/[^a-zA-Z0-9]/g, '_') || 'Quotation';
-    const filename = `Shri_Solar_Quotation_${clientSanitized}_${currentQuote.capacityKW}kW.pdf`;
-    
+// Helper: Generate crisp A4 PDF Blob without canvas taint or viewport issues
+async function generatePDFBlob() {
+    const source = document.getElementById('quotationDocument');
+    if (!source) throw new Error("Document not found");
+
+    // Clone element and ensure all images use safe Base64
+    const clone = source.cloneNode(true);
+    const images = clone.querySelectorAll('img');
+    images.forEach(img => {
+        if (window.SHRI_SOLAR_LOGO_BASE64) {
+            img.src = window.SHRI_SOLAR_LOGO_BASE64;
+        }
+    });
+
+    clone.style.transform = 'none';
+    clone.style.boxShadow = 'none';
+    clone.style.margin = '0';
+    clone.style.width = '794px';
+    clone.style.minWidth = '794px';
+    clone.style.maxWidth = '794px';
+    clone.style.background = '#ffffff';
+
+    const container = document.createElement('div');
+    container.style.position = 'fixed';
+    container.style.left = '-9999px';
+    container.style.top = '0';
+    container.style.width = '794px';
+    container.style.background = '#ffffff';
+    container.style.zIndex = '-99999';
+    container.style.overflow = 'visible';
+    container.appendChild(clone);
+    document.body.appendChild(container);
+
     const opt = {
-        margin: [8, 8, 8, 8],
-        filename: filename,
+        margin: [6, 6, 6, 6],
         image: { type: 'jpeg', quality: 0.98 },
-        html2canvas: { scale: 2, useCORS: true, logging: false },
+        html2canvas: {
+            scale: 2,
+            useCORS: true,
+            allowTaint: true,
+            logging: false,
+            windowWidth: 1024,
+            scrollX: 0,
+            scrollY: 0
+        },
         jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
     };
-    
-    // Show download indicator
-    const btn = document.getElementById('btnDownloadPDF');
-    const originalText = btn.innerHTML;
-    btn.innerHTML = `<svg class="animate-spin h-4 w-4 mr-2 text-white inline" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg> Generating PDF...`;
-    
-    html2pdf().set(opt).from(element).save().then(() => {
-        btn.innerHTML = originalText;
-    }).catch(err => {
-        console.error("PDF generation error:", err);
-        btn.innerHTML = originalText;
-        // Fallback to print
-        window.print();
-    });
+
+    try {
+        if (typeof html2pdf === 'undefined') {
+            throw new Error("html2pdf library is not loaded");
+        }
+        const pdfBlob = await html2pdf().set(opt).from(clone).output('blob');
+        return pdfBlob;
+    } finally {
+        if (document.body.contains(container)) {
+            document.body.removeChild(container);
+        }
+    }
 }
 
-// Print Quotation
+// 1. Direct PDF Download (Direct file save, NO print dialog)
+async function downloadPDF() {
+    const btns = document.querySelectorAll('.btn-download-pdf-action');
+    btns.forEach(btn => {
+        btn.disabled = true;
+        btn.dataset.oldText = btn.innerHTML;
+        btn.innerHTML = `<svg class="animate-spin h-4 w-4 mr-1.5 text-white inline" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg> Downloading...`;
+    });
+
+    try {
+        const clientSanitized = (currentQuote.clientName || 'Quotation').trim().replace(/[^a-zA-Z0-9]/g, '_') || 'Quotation';
+        const filename = `Shri_Solar_Quotation_${clientSanitized}_${currentQuote.capacityKW}kW.pdf`;
+
+        const pdfBlob = await generatePDFBlob();
+        
+        // Trigger browser direct download
+        const blobUrl = URL.createObjectURL(pdfBlob);
+        const downloadAnchor = document.createElement('a');
+        downloadAnchor.href = blobUrl;
+        downloadAnchor.download = filename;
+        document.body.appendChild(downloadAnchor);
+        downloadAnchor.click();
+        document.body.removeChild(downloadAnchor);
+        setTimeout(() => URL.revokeObjectURL(blobUrl), 3000);
+    } catch (err) {
+        console.error("Direct PDF download error:", err);
+        alert("Direct download error. Opening print preview as alternative.");
+        window.print();
+    } finally {
+        btns.forEach(btn => {
+            btn.disabled = false;
+            if (btn.dataset.oldText) btn.innerHTML = btn.dataset.oldText;
+        });
+    }
+}
+
+// 2. Direct PDF File Share (Web Share API to WhatsApp / Apps with attached PDF)
+async function sharePDFDirect() {
+    const shareBtns = document.querySelectorAll('.btn-share-pdf-action');
+    shareBtns.forEach(btn => {
+        btn.disabled = true;
+        btn.dataset.oldText = btn.innerHTML;
+        btn.innerHTML = `<svg class="animate-spin h-4 w-4 mr-1.5 text-white inline" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg> Sharing...`;
+    });
+
+    try {
+        const clientSanitized = (currentQuote.clientName || 'Customer').trim().replace(/[^a-zA-Z0-9]/g, '_') || 'Customer';
+        const filename = `Shri_Solar_Quotation_${clientSanitized}_${currentQuote.capacityKW}kW.pdf`;
+        const pdfBlob = await generatePDFBlob();
+        const pdfFile = new File([pdfBlob], filename, { type: 'application/pdf' });
+
+        if (navigator.canShare && navigator.canShare({ files: [pdfFile] })) {
+            await navigator.share({
+                files: [pdfFile],
+                title: `Solar Quotation - ${currentQuote.clientName || 'Customer'}`,
+                text: `☀️ Shri Solar Services Quotation for ${currentQuote.packageName}`
+            });
+        } else {
+            // Fallback for browsers that don't support file sharing: download PDF and open WhatsApp message
+            downloadPDF();
+            shareWhatsApp();
+        }
+    } catch (err) {
+        if (err.name !== 'AbortError') {
+            console.error("Direct share error:", err);
+            downloadPDF();
+            shareWhatsApp();
+        }
+    } finally {
+        shareBtns.forEach(btn => {
+            btn.disabled = false;
+            if (btn.dataset.oldText) btn.innerHTML = btn.dataset.oldText;
+        });
+    }
+}
+
+// 3. Print Quotation (Dedicated Print Button)
 function printQuotation() {
     window.print();
 }
 
-// Share on WhatsApp
+// 4. Share Text Summary on WhatsApp
 function shareWhatsApp() {
     const client = currentQuote.clientName && currentQuote.clientName.trim() !== "" ? currentQuote.clientName : "Customer";
     const capacity = currentQuote.capacityKW + " kW";
@@ -456,7 +602,7 @@ function shareWhatsApp() {
     window.open(waUrl, '_blank');
 }
 
-// Reset / New Quote
+// 5. Reset / New Quote
 function newQuotation() {
     currentQuote.quoteNo = "SS-" + Math.floor(100 + Math.random() * 900);
     currentQuote.clientName = "";
@@ -475,3 +621,4 @@ function newQuotation() {
 
     applyPackage('3kw');
 }
+

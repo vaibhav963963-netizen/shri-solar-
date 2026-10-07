@@ -26,6 +26,7 @@ body {
     color: #1e293b;
     line-height: 1.5;
     overflow-x: hidden;
+    width: 100%;
 }
 
 h1, h2, h3, h4, .font-heading {
@@ -34,8 +35,8 @@ h1, h2, h3, h4, .font-heading {
 
 /* Custom Scrollbars */
 ::-webkit-scrollbar {
-    width: 6px;
-    height: 6px;
+    width: 8px;
+    height: 8px;
 }
 ::-webkit-scrollbar-track {
     background: #f1f5f9;
@@ -168,13 +169,16 @@ h1, h2, h3, h4, .font-heading {
 }
 
 /* ========================================================
-   APP LAYOUT & RESPONSIVENESS
+   APP LAYOUT & RESPONSIVENESS (Independent Dual Scrolling)
    ======================================================== */
 .app-container {
     display: grid;
-    grid-template-columns: 480px 1fr;
+    grid-template-columns: minmax(360px, 480px) minmax(0, 1fr);
     min-height: 100vh;
+    height: 100vh;
     gap: 0;
+    width: 100%;
+    overflow: hidden;
 }
 
 /* Mobile Tab Switcher (Hidden on Desktop) */
@@ -184,43 +188,46 @@ h1, h2, h3, h4, .font-heading {
 
 @media (max-width: 1024px) {
     .app-container {
-        display: block;
-        min-height: auto;
+        display: block !important;
+        min-height: auto !important;
+        height: auto !important;
+        width: 100% !important;
+        overflow: visible !important;
     }
 
     .mobile-tab-nav {
-        display: flex;
-        position: sticky;
-        top: 0;
-        z-index: 50;
-        background: #064e3b;
-        padding: 0.5rem 0.75rem;
-        gap: 0.5rem;
-        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+        display: flex !important;
+        position: sticky !important;
+        top: 0 !important;
+        z-index: 50 !important;
+        background: #064e3b !important;
+        padding: 0.5rem 0.75rem !important;
+        gap: 0.5rem !important;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2) !important;
     }
 
     .mobile-tab-btn {
-        flex: 1;
-        padding: 0.65rem 0.5rem;
-        border-radius: 8px;
-        font-size: 0.85rem;
-        font-weight: 700;
-        color: #a7f3d0;
-        background: rgba(255, 255, 255, 0.08);
-        border: 1px solid rgba(255, 255, 255, 0.15);
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        gap: 0.4rem;
-        cursor: pointer;
-        transition: all 0.2s ease;
+        flex: 1 !important;
+        padding: 0.65rem 0.5rem !important;
+        border-radius: 8px !important;
+        font-size: 0.85rem !important;
+        font-weight: 700 !important;
+        color: #a7f3d0 !important;
+        background: rgba(255, 255, 255, 0.08) !important;
+        border: 1px solid rgba(255, 255, 255, 0.15) !important;
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        gap: 0.4rem !important;
+        cursor: pointer !important;
+        transition: all 0.2s ease !important;
     }
 
     .mobile-tab-btn.active {
-        background: #ffffff;
-        color: #065f46;
-        border-color: #ffffff;
-        box-shadow: 0 2px 6px rgba(0,0,0,0.15);
+        background: #ffffff !important;
+        color: #065f46 !important;
+        border-color: #ffffff !important;
+        box-shadow: 0 2px 6px rgba(0,0,0,0.15) !important;
     }
 
     /* Mobile panel visibility toggles */
@@ -228,6 +235,9 @@ h1, h2, h3, h4, .font-heading {
         height: auto !important;
         position: relative !important;
         border-right: none !important;
+        width: 100% !important;
+        overflow-y: visible !important;
+        overflow-x: auto !important;
     }
 
     .editor-sidebar.mobile-hidden {
@@ -235,8 +245,17 @@ h1, h2, h3, h4, .font-heading {
     }
 
     .preview-workspace {
-        padding: 1rem 0.5rem !important;
-        min-height: auto !important;
+        padding: 1rem 0.5rem 2rem 0.5rem !important;
+        min-height: calc(100vh - 60px) !important;
+        height: auto !important;
+        width: 100% !important;
+        display: flex !important;
+        flex-direction: column !important;
+        align-items: center !important;
+        background: #cbd5e1 !important;
+        overflow-x: auto !important;
+        overflow-y: auto !important;
+        -webkit-overflow-scrolling: touch !important;
     }
 
     .preview-workspace.mobile-hidden {
@@ -244,12 +263,13 @@ h1, h2, h3, h4, .font-heading {
     }
 
     .preview-sheet-outer {
-        width: 100%;
-        overflow-x: auto;
-        -webkit-overflow-scrolling: touch;
-        padding-bottom: 1.5rem;
-        display: flex;
-        justify-content: flex-start;
+        width: 100% !important;
+        display: flex !important;
+        justify-content: center !important;
+        overflow-x: auto !important;
+        overflow-y: visible !important;
+        -webkit-overflow-scrolling: touch !important;
+        padding-bottom: 2rem !important;
     }
 
     .form-grid-3 {
@@ -272,17 +292,22 @@ h1, h2, h3, h4, .font-heading {
     }
 }
 
-/* Sidebar / Editor Styles */
+/* ========================================================
+   SIDEBAR / EDITOR STYLES (Vertical & Horizontal Scroll)
+   ======================================================== */
 .editor-sidebar {
     background: #ffffff;
     border-right: 1px solid var(--border-color);
     height: 100vh;
     overflow-y: auto;
+    overflow-x: auto;
     position: sticky;
     top: 0;
     z-index: 20;
     display: flex;
     flex-direction: column;
+    min-width: 0;
+    -webkit-overflow-scrolling: touch;
 }
 
 .editor-header {
@@ -300,6 +325,7 @@ h1, h2, h3, h4, .font-heading {
     display: flex;
     flex-direction: column;
     gap: 1.25rem;
+    min-width: 320px;
 }
 
 /* Clean Form Sections */
@@ -498,16 +524,21 @@ h1, h2, h3, h4, .font-heading {
     background: #20ba5a;
 }
 
-/* Preview Workspace */
+/* ========================================================
+   PREVIEW WORKSPACE (Independent Vertical & Horizontal Pan)
+   ======================================================== */
 .preview-workspace {
     padding: 1.5rem;
     overflow-y: auto;
+    overflow-x: auto;
     display: flex;
     flex-direction: column;
     align-items: center;
     gap: 1.25rem;
-    background-color: #e2e8f0;
-    min-height: 100vh;
+    background-color: #cbd5e1;
+    height: 100vh;
+    min-width: 0;
+    -webkit-overflow-scrolling: touch;
 }
 
 .preview-controls {
@@ -526,6 +557,11 @@ h1, h2, h3, h4, .font-heading {
     width: 100%;
     display: flex;
     justify-content: center;
+    align-items: flex-start;
+    overflow-x: auto;
+    overflow-y: visible;
+    padding-bottom: 2rem;
+    -webkit-overflow-scrolling: touch;
 }
 
 /* ========================================================
@@ -534,8 +570,9 @@ h1, h2, h3, h4, .font-heading {
 .quotation-sheet {
     width: 210mm;
     min-width: 210mm;
+    max-width: 210mm;
     min-height: 297mm;
-    background: white;
+    background: #ffffff;
     box-shadow: 0 10px 30px -5px rgba(0, 0, 0, 0.15);
     border-radius: 4px;
     padding: 12mm 14mm;
@@ -873,6 +910,7 @@ h1, h2, h3, h4, .font-heading {
         display: block !important;
         width: 100% !important;
         min-height: auto !important;
+        height: auto !important;
     }
 
     .preview-workspace {
@@ -880,13 +918,17 @@ h1, h2, h3, h4, .font-heading {
         padding: 0 !important;
         margin: 0 !important;
         width: 100% !important;
+        height: auto !important;
         display: block !important;
+        overflow: visible !important;
     }
 
     .preview-sheet-outer {
         display: block !important;
         width: 100% !important;
         overflow: visible !important;
+        height: auto !important;
+        padding: 0 !important;
     }
 
     .quotation-sheet {
@@ -897,6 +939,7 @@ h1, h2, h3, h4, .font-heading {
         min-width: 100% !important;
         max-width: 100% !important;
         min-height: auto !important;
+        transform: none !important;
         page-break-after: avoid;
         page-break-inside: avoid;
         break-inside: avoid;
