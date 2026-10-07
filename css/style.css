@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Mukta:wght@400;500;600;700;800&family=Outfit:wght@300;400;500;600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap');
 
 :root {
     --primary: #047857; /* Emerald green */
@@ -21,7 +21,7 @@
 }
 
 body {
-    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-family: 'Plus Jakarta Sans', 'Mukta', sans-serif;
     background-color: #f1f5f9;
     color: #1e293b;
     line-height: 1.5;
@@ -30,7 +30,7 @@ body {
 }
 
 h1, h2, h3, h4, .font-heading {
-    font-family: 'Outfit', sans-serif;
+    font-family: 'Outfit', 'Mukta', sans-serif;
 }
 
 /* Custom Scrollbars */
@@ -575,14 +575,14 @@ h1, h2, h3, h4, .font-heading {
     background: #ffffff;
     box-shadow: 0 10px 30px -5px rgba(0, 0, 0, 0.15);
     border-radius: 4px;
-    padding: 12mm 14mm;
+    padding: 10mm 12mm;
     display: flex;
     flex-direction: column;
     justify-content: space-between;
     position: relative;
     color: #1e293b;
-    font-size: 12.5px;
-    line-height: 1.45;
+    font-size: 12px;
+    line-height: 1.4;
     box-sizing: border-box;
 }
 
@@ -592,24 +592,24 @@ h1, h2, h3, h4, .font-heading {
     justify-content: space-between;
     align-items: center;
     border-bottom: 2.5px solid var(--primary);
-    padding-bottom: 12px;
-    margin-bottom: 14px;
+    padding-bottom: 10px;
+    margin-bottom: 12px;
 }
 
 .quote-brand {
     display: flex;
     align-items: center;
-    gap: 14px;
+    gap: 12px;
 }
 
 .quote-brand img {
-    height: 72px;
+    height: 68px;
     width: auto;
     object-fit: contain;
 }
 
 .brand-text h1 {
-    font-size: 20px;
+    font-size: 19px;
     font-weight: 800;
     color: #064e3b;
     letter-spacing: -0.01em;
@@ -617,13 +617,13 @@ h1, h2, h3, h4, .font-heading {
 }
 
 .brand-text .marathi-title {
-    font-size: 14px;
+    font-size: 13px;
     font-weight: 700;
     color: var(--primary);
 }
 
 .brand-text .tagline {
-    font-size: 9.5px;
+    font-size: 9px;
     font-weight: 700;
     letter-spacing: 0.12em;
     color: #64748b;
@@ -633,15 +633,15 @@ h1, h2, h3, h4, .font-heading {
 
 .quote-contact-info {
     text-align: right;
-    font-size: 10.5px;
+    font-size: 10px;
     color: #475569;
-    line-height: 1.4;
+    line-height: 1.35;
 }
 
 .quote-contact-info .phone {
     font-weight: 700;
     color: #0f172a;
-    font-size: 12px;
+    font-size: 11.5px;
 }
 
 /* Doc Title Badge */
@@ -653,12 +653,12 @@ h1, h2, h3, h4, .font-heading {
     border: 1px solid #bbf7d0;
     border-left: 4px solid var(--primary);
     border-radius: 6px;
-    padding: 8px 14px;
-    margin-bottom: 14px;
+    padding: 7px 12px;
+    margin-bottom: 12px;
 }
 
 .doc-title-bar h2 {
-    font-size: 14px;
+    font-size: 13.5px;
     font-weight: 800;
     color: #065f46;
     letter-spacing: 0.05em;
@@ -667,8 +667,8 @@ h1, h2, h3, h4, .font-heading {
 
 .doc-meta {
     display: flex;
-    gap: 16px;
-    font-size: 11px;
+    gap: 14px;
+    font-size: 10.5px;
 }
 
 .doc-meta span strong {
@@ -679,33 +679,33 @@ h1, h2, h3, h4, .font-heading {
 .client-info-grid {
     display: grid;
     grid-template-columns: 1.2fr 1fr;
-    gap: 12px;
-    margin-bottom: 14px;
+    gap: 10px;
+    margin-bottom: 12px;
 }
 
 .info-card {
     background: #f8fafc;
     border: 1px solid #e2e8f0;
     border-radius: 6px;
-    padding: 10px 12px;
+    padding: 8px 10px;
 }
 
 .info-card-header {
-    font-size: 10px;
+    font-size: 9.5px;
     font-weight: 800;
     text-transform: uppercase;
     letter-spacing: 0.06em;
     color: var(--primary);
-    margin-bottom: 6px;
+    margin-bottom: 5px;
     border-bottom: 1px solid #e2e8f0;
-    padding-bottom: 3px;
+    padding-bottom: 2px;
 }
 
 .info-row {
     display: flex;
     justify-content: space-between;
-    margin-bottom: 3px;
-    font-size: 11.5px;
+    margin-bottom: 2.5px;
+    font-size: 11px;
 }
 
 .info-row .label {
@@ -723,8 +723,8 @@ h1, h2, h3, h4, .font-heading {
 .specs-table, .pricing-table {
     width: 100%;
     border-collapse: collapse;
-    margin-bottom: 12px;
-    font-size: 11.5px;
+    margin-bottom: 10px;
+    font-size: 11px;
 }
 
 .specs-table th, .pricing-table th {
@@ -732,14 +732,14 @@ h1, h2, h3, h4, .font-heading {
     color: white;
     font-weight: 700;
     text-align: left;
-    padding: 6px 10px;
-    font-size: 11px;
+    padding: 5px 8px;
+    font-size: 10.5px;
     letter-spacing: 0.02em;
     text-transform: uppercase;
 }
 
 .specs-table td, .pricing-table td {
-    padding: 6px 10px;
+    padding: 5px 8px;
     border-bottom: 1px solid #e2e8f0;
     color: #334155;
 }
@@ -753,24 +753,24 @@ h1, h2, h3, h4, .font-heading {
     font-weight: 700;
     color: #065f46;
     background: #d1fae5;
-    padding: 1px 6px;
+    padding: 1px 5px;
     border-radius: 4px;
-    font-size: 10px;
+    font-size: 9.5px;
 }
 
 /* Financial Summary Highlight */
 .financial-grid {
     display: grid;
     grid-template-columns: 1fr 1fr;
-    gap: 12px;
-    margin-bottom: 12px;
+    gap: 10px;
+    margin-bottom: 10px;
 }
 
 .highlight-box {
     background: #f0fdf4;
     border: 1.5px solid #86efac;
     border-radius: 8px;
-    padding: 10px 14px;
+    padding: 8px 12px;
 }
 
 .highlight-box.savings-box {
@@ -782,14 +782,14 @@ h1, h2, h3, h4, .font-heading {
     background: #064e3b;
     color: white;
     border-radius: 8px;
-    padding: 10px 14px;
+    padding: 8px 12px;
     display: flex;
     justify-content: space-between;
     align-items: center;
 }
 
 .total-due-card .amount {
-    font-size: 20px;
+    font-size: 19px;
     font-weight: 800;
     color: #fde047;
     letter-spacing: -0.02em;
@@ -800,7 +800,7 @@ h1, h2, h3, h4, .font-heading {
     display: grid;
     grid-template-columns: repeat(4, 1fr);
     gap: 6px;
-    margin-bottom: 12px;
+    margin-bottom: 10px;
     text-align: center;
 }
 
@@ -808,18 +808,18 @@ h1, h2, h3, h4, .font-heading {
     background: #f8fafc;
     border: 1px solid #e2e8f0;
     border-radius: 6px;
-    padding: 6px 4px;
+    padding: 5px 3px;
 }
 
 .milestone-item .pct {
-    font-size: 13px;
+    font-size: 12px;
     font-weight: 800;
     color: var(--primary);
     display: block;
 }
 
 .milestone-item .stage {
-    font-size: 9.5px;
+    font-size: 9px;
     color: #475569;
     font-weight: 600;
     text-transform: uppercase;
@@ -829,21 +829,21 @@ h1, h2, h3, h4, .font-heading {
 .terms-signature-grid {
     display: grid;
     grid-template-columns: 1.4fr 1fr;
-    gap: 14px;
-    margin-top: 8px;
-    padding-top: 10px;
+    gap: 12px;
+    margin-top: 6px;
+    padding-top: 8px;
     border-top: 1px dashed #cbd5e1;
 }
 
 .terms-list {
-    font-size: 9.5px;
+    font-size: 9px;
     color: #64748b;
-    line-height: 1.4;
-    padding-left: 14px;
+    line-height: 1.35;
+    padding-left: 12px;
 }
 
 .terms-list li {
-    margin-bottom: 3px;
+    margin-bottom: 2px;
 }
 
 .signature-box {
@@ -856,18 +856,18 @@ h1, h2, h3, h4, .font-heading {
 
 .signature-line {
     border-top: 1.5px solid #0f172a;
-    width: 150px;
-    margin-bottom: 4px;
+    width: 140px;
+    margin-bottom: 3px;
 }
 
 .signatory-name {
     font-weight: 700;
-    font-size: 11px;
+    font-size: 10.5px;
     color: #0f172a;
 }
 
 .signatory-title {
-    font-size: 9.5px;
+    font-size: 9px;
     color: #64748b;
 }
 
@@ -875,9 +875,9 @@ h1, h2, h3, h4, .font-heading {
 .quote-footer {
     text-align: center;
     border-top: 1px solid #e2e8f0;
-    padding-top: 8px;
-    margin-top: 10px;
-    font-size: 9px;
+    padding-top: 6px;
+    margin-top: 8px;
+    font-size: 8.5px;
     color: #94a3b8;
 }
 
@@ -887,7 +887,7 @@ h1, h2, h3, h4, .font-heading {
 @media print {
     @page {
         size: A4 portrait;
-        margin: 8mm 10mm;
+        margin: 6mm 8mm;
     }
 
     body, html {

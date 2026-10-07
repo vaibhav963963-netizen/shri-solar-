@@ -445,36 +445,46 @@ async function generatePDFBlob() {
         }
     });
 
+    // Reset styles on clone for pure 1:1 unscaled A4 capture
     clone.style.transform = 'none';
     clone.style.boxShadow = 'none';
     clone.style.margin = '0';
     clone.style.width = '794px';
     clone.style.minWidth = '794px';
     clone.style.maxWidth = '794px';
+    clone.style.minHeight = '1123px';
     clone.style.background = '#ffffff';
 
+    // Temporary top-level staging container positioned at 0,0 so mobile viewport doesn't crop it
     const container = document.createElement('div');
     container.style.position = 'fixed';
-    container.style.left = '-9999px';
+    container.style.left = '0';
     container.style.top = '0';
     container.style.width = '794px';
+    container.style.minHeight = '1123px';
     container.style.background = '#ffffff';
-    container.style.zIndex = '-99999';
+    container.style.zIndex = '999999';
     container.style.overflow = 'visible';
+    container.style.pointerEvents = 'none';
+    container.style.opacity = '1';
     container.appendChild(clone);
     document.body.appendChild(container);
 
     const opt = {
-        margin: [6, 6, 6, 6],
+        margin: [0, 0, 0, 0],
         image: { type: 'jpeg', quality: 0.98 },
         html2canvas: {
             scale: 2,
             useCORS: true,
             allowTaint: true,
             logging: false,
-            windowWidth: 1024,
+            letterRendering: true,
+            width: 794,
+            windowWidth: 794,
             scrollX: 0,
-            scrollY: 0
+            scrollY: 0,
+            x: 0,
+            y: 0
         },
         jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
     };
